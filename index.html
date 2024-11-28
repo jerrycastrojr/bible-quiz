@@ -44,28 +44,24 @@
     button {
       padding: 12px 20px;
       margin: 10px;
-      background-color: #007bff;
+      background-color: #0bff;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       font-size: 1.0em;
-      transition: transform 0.3s ease, background-color 0.3s ease;
+      transition: transform 0.5s ease, background-color 0.5s ease;
     }
 
     button:hover {
-      transform: scale(1.05);
-      background-color:white;
+      transform: scale(1.5);
+      background-color: white;
     }
 
     button:disabled {
       background-color: gray;
-      cursor: not-allowed
+      cursor: not-allowed;
     }
-    
-    button:changecolor {
-      background-color: orange;
-    }
-    
+
     #message.correct {
       font-size: 1.4em;
       color: #28a745; /* Green for Correct */
@@ -74,7 +70,7 @@
 
     #message.wrong {
       font-size: 1.4em;
-      color: #dc4000; /* Red for Wrong */
+      color: #dc3545; /* Red for Wrong */
       margin-top: 10px;
     }
 
@@ -90,53 +86,66 @@
       gap: 15px;
       flex-wrap: wrap;
       margin: 10px 0;
-  
     }
 
     #music-controls button {
-      background-color: #800000;
+      background-color: maroon;
       color: white;
     }
 
     #music-controls button:hover {
       background-color: #550000;
     }
-    
+
     #question {
-  margin: 15px 0;
-  font-style: italic;
-  font-size: 1.3em; /* Updated font size */
-}
-    
+      margin: 15px 0;
+      font-style: italic;
+      font-size: 1.3em;
+    }
   </style>
 </head>
-  
 <body>
+  <!-- Background music and sound effects -->
   <audio id="background-music" loop autoplay>
     <source src="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
   <audio id="click-sound">
-    <source src="https://jerrycastrojr.github.io/biblequizz/mouseclick.html">
+    <source src="https://jerrycastrojr.github.io/bible-quiz/">
+    Your browser does not support the audio element.
+  </audio>
+  <audio id="correct-sound">
+    <source src="https://example.com/correct-answer.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <audio id="wrong-sound">
+    <source src="https://example.com/wrong-answer.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <audio id="game-complete-sound">
+    <source src="https://example.com/game-complete.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
   <div class="container">
     <h1>BIBLE QUIZ</h1>
     <h2>by: Jerry C.</h2>
+
+    <!-- Start Game -->
     <div id="mode-buttons" class="buttons">
       <button onclick="playClickSound(); startGame()">Start Game</button>
     </div>
-    
-    
+
+    <!-- Category Selection -->
     <div id="category-buttons" class="buttons" style="display: none;">
-     <p id="category-instruction">Select your category:</p>
-    
+      <p id="category-instruction">Please select your category:</p>
       <button onclick="playClickSound(); selectCategory('Person')">Person</button>
       <button onclick="playClickSound(); selectCategory('Place')">Place</button>
       <button onclick="playClickSound(); selectCategory('Event')">Event</button>
       <button onclick="playClickSound(); selectCategory('Others')">Others</button>
     </div>
+
+    <!-- Question Section -->
     <div id="question-container" style="display: none;">
       <p id="question"></p>
       <div id="options" class="buttons"></div>
@@ -148,17 +157,20 @@
         <button onclick="playClickSound(); exitGame()">Exit Game</button>
       </div>
     </div>
+
+    <!-- End Game -->
     <div id="end-buttons" class="buttons" style="display: none;">
       <button onclick="playClickSound(); playAgain()">Restart Game</button>
       <button onclick="playClickSound(); exitGame()">Exit Game</button>
     </div>
+
+    <!-- Music Controls -->
     <div id="music-controls" class="buttons">
       <button id="music-toggle" onclick="playClickSound(); toggleMusic()">Play Music</button>
     </div>
   </div>
 
   <script>
-    
     const questionsByCategory = {
      
       Person: [
@@ -288,11 +300,14 @@
     let currentCategory = "";
     let currentQuestionIndex = 0;
     let score = 0;
+
+    const correctSound = document.getElementById("correct-sound");
+    const wrongSound = document.getElementById("wrong-sound");
+    const gameCompleteSound = document.getElementById("game-complete-sound");
     const backgroundMusic = document.getElementById("background-music");
-    const clickSound = document.getElementById("click-sound");
 
     function playClickSound() {
-      clickSound.play();
+      document.getElementById("click-sound").play();
     }
 
     function toggleMusic() {
@@ -333,8 +348,8 @@
         button.innerText = answer;
         button.onclick = () => selectAnswer(answer);
         optionsDiv.appendChild(button);
-        
       });
+
       document.getElementById("message").innerText = "";
       document.getElementById("verse").innerText = "";
       document.getElementById("decision-buttons").style.display = "none";
@@ -345,24 +360,23 @@
       const questionData = questions[currentQuestionIndex];
 
       const allButtons = document.getElementById("options").getElementsByTagName("button");
-      
       Array.from(allButtons).forEach(button => {
         button.disabled = true;
-        button.style.opacity = "1.0";
       });
-     
 
       const messageElement = document.getElementById("message");
       if (selectedAnswer === questionData.correct) {
+        correctSound.play();
         messageElement.innerText = "Correct!";
         messageElement.className = "correct";
         score++;
       } else {
+        wrongSound.play();
         messageElement.innerText = `Wrong! The correct answer was: ${questionData.correct}.`;
         messageElement.className = "wrong";
       }
 
-     document.getElementById("verse").innerText = questionData.verse;
+      document.getElementById("verse").innerText = questionData.verse;
       document.getElementById("decision-buttons").style.display = "flex";
     }
 
@@ -370,43 +384,30 @@
       const questions = questionsByCategory[currentCategory];
       currentQuestionIndex++;
       if (currentQuestionIndex >= questions.length) {
+        gameCompleteSound.play();
         document.getElementById("question").innerText = "Quiz Completed!";
         document.getElementById("options").innerHTML = "";
         document.getElementById("message").innerText = `Your score is ${score}/${questions.length}.`;
         document.getElementById("verse").innerText = "";
         document.getElementById("decision-buttons").style.display = "none";
-        document.getElementById("end-buttons").style.display = "flex";  // End buttons shown after all questions
+        document.getElementById("end-buttons").style.display = "flex";
       } else {
         loadQuestion();
       }
     }
 
-   function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
-function playAgain() {
-  // Shuffle questions in each category
-  Object.keys(questionsByCategory).forEach(category => {
-    shuffleArray(questionsByCategory[category]);
-  });
-
-  currentQuestionIndex = 0;
-  score = 0;
-  document.getElementById("end-buttons").style.display = "none";
-  document.getElementById("category-buttons").style.display = "flex";
-  document.getElementById("question-container").style.display = "none";
-}
-
+    function playAgain() {
+      currentQuestionIndex = 0;
+      score = 0;
+      document.getElementById("end-buttons").style.display = "none";
+      document.getElementById("category-buttons").style.display = "flex";
+      document.getElementById("question-container").style.display = "none";
+    }
 
     function exitGame() {
       alert("Thank you for playing! Exiting game...");
       location.reload();
     }
-    
   </script>
 </body>
 </html>
