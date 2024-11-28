@@ -19,6 +19,7 @@
       align-items: center;
       height: 100vh;
     }
+
     .container {
       max-width: 600px;
       margin: 20px auto;
@@ -27,8 +28,19 @@
       border-radius: 15px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
-    h1 { font-size: 3.5em; margin-bottom: 20px; color: #f9d342; }
-    h2 { font-size: 1.5em; margin-bottom: 20px; color: #f9d250; }
+
+    h1 {
+      font-size: 2.8em;
+      margin-bottom: 20px;
+      color: #f9d342;
+    }
+
+    h2 {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      color: #f9d250;
+    }
+
     button {
       padding: 12px 20px;
       margin: 10px;
@@ -36,27 +48,40 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 1.2em;
+      font-size: 1.0em;
       transition: transform 0.3s ease, background-color 0.3s ease;
     }
-    button:hover { transform: scale(1.05); }
 
-    /* Green Background for Choices */
-    #options button {
-      background-color: #2e8b57; /* Green */
-      color: white;
-    }
-    #options button:hover {
-      background-color: #206030; /* Darker Green */
+    button:hover {
+      transform: scale(1.05);
+      background-color:white;
     }
 
-    /* Dark Maroon Background for Music Control Buttons */
-    #music-controls button {
-      background-color: #800000; /* Dark Maroon */
-      color: white;
+    button:disabled {
+      background-color: gray;
+      cursor: not-allowed
     }
-    #music-controls button:hover {
-      background-color: #550000; /* Darker Maroon */
+    
+    button:changecolor {
+      background-color: orange;
+    }
+    
+    #message.correct {
+      font-size: 1.4em;
+      color: #28a745; /* Green for Correct */
+      margin-top: 10px;
+    }
+
+    #message.wrong {
+      font-size: 1.4em;
+      color: #dc4000; /* Red for Wrong */
+      margin-top: 10px;
+    }
+
+    #verse {
+      margin: 15px 0;
+      font-style: italic;
+      font-size: 1.3em;
     }
 
     .buttons {
@@ -64,60 +89,82 @@
       justify-content: center;
       gap: 15px;
       flex-wrap: wrap;
-      margin: 20px 0;
+      margin: 10px 0;
+  
     }
-    #background-music { display: none; }
-    @media (max-width: 600px) {
-      .buttons { flex-wrap: wrap; }
+
+    #music-controls button {
+      background-color: #800000;
+      color: white;
     }
+
+    #music-controls button:hover {
+      background-color: #550000;
+    }
+    
+    #question {
+  margin: 15px 0;
+  font-style: italic;
+  font-size: 1.3em; /* Updated font size */
+}
+    
   </style>
 </head>
+  
 <body>
   <audio id="background-music" loop autoplay>
     <source src="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
   <audio id="click-sound">
-    <source src="https://www.freesoundeffects.com/free-sounds/click/click-sound.mp3" type="audio/mpeg">
+    <source src="https://jerrycastrojr.github.io/biblequizz/mouseclick.html">
     Your browser does not support the audio element.
   </audio>
+
   <div class="container">
-    <h1>BIBLE QUIZ GAME</h1>
+    <h1>BIBLE QUIZ</h1>
     <h2>by: Jerry C.</h2>
-    <div class="buttons" id="mode-buttons">
-      <button onclick="startGame('voice')">Voice Mode</button>
-      <button onclick="startGame('reading')">Reading Mode</button>
-      <button onclick="exitGame()">Exit Game</button>
+    <div id="mode-buttons" class="buttons">
+      <button onclick="playClickSound(); startGame()">Start Game</button>
     </div>
-    <div class="buttons" id="category-buttons" style="display: none;">
-      <button onclick="selectCategory('Person')">Person</button>
-      <button onclick="selectCategory('Place')">Place</button>
-      <button onclick="selectCategory('Event')">Event</button>
-      <button onclick="selectCategory('Others')">Others</button>
+    
+    
+    <div id="category-buttons" class="buttons" style="display: none;">
+     <p id="category-instruction">Select your category:</p>
+    
+      <button onclick="playClickSound(); selectCategory('Person')">Person</button>
+      <button onclick="playClickSound(); selectCategory('Place')">Place</button>
+      <button onclick="playClickSound(); selectCategory('Event')">Event</button>
+      <button onclick="playClickSound(); selectCategory('Others')">Others</button>
     </div>
-    <p id="question"></p>
-    <div id="options"></div>
-    <p class="message" id="message"></p>
-    <p id="verse"></p>
-    <div class="buttons" id="decision-buttons" style="display: none;">
-      <button onclick="nextQuestion()">Continue</button>
-      <button onclick="playAgain()">Restart Game</button>
- <button onclick="exitGame()">Exit Game</button>      
+    <div id="question-container" style="display: none;">
+      <p id="question"></p>
+      <div id="options" class="buttons"></div>
+      <p id="message"></p>
+      <p id="verse"></p>
+      <div id="decision-buttons" class="buttons" style="display: none;">
+        <button onclick="playClickSound(); nextQuestion()">Continue</button>
+        <button onclick="playClickSound(); playAgain()">Restart Game</button>
+        <button onclick="playClickSound(); exitGame()">Exit Game</button>
+      </div>
     </div>
-    <div class="buttons" id="end-buttons" style="display: none;">
-      <button onclick="playAgain()">Restart Game</button>
-      <button onclick="exitGame()">Exit Game</button>
+    <div id="end-buttons" class="buttons" style="display: none;">
+      <button onclick="playClickSound(); playAgain()">Restart Game</button>
+      <button onclick="playClickSound(); exitGame()">Exit Game</button>
     </div>
-    <div class="buttons" id="music-controls">
-      <button onclick="increaseVolume()">+</button>
-      <button id="music-toggle" onclick="toggleMusic()">Pause Music</button>
- 
-      <button onclick="decreaseVolume()">-</button>
+    <div id="music-controls" class="buttons">
+      <button id="music-toggle" onclick="playClickSound(); toggleMusic()">Play Music</button>
     </div>
   </div>
+
   <script>
-    const allQuestions = [
-       { question: "Who was the first man created by God?", answers: ["Eve", "Adam", "Cain", "Noah"], correct: "Adam", verse: "Genesis 2:7", category: "Person" },
+    
+    const questionsByCategory = {
+     
+      Person: [
+        { question: "Who was the first man created by God?", answers: ["Eve", "Adam", "Cain", "Noah"], correct: "Adam", verse: "Genesis 2:7" },
+        { question: "Who betrayed Jesus?", answers: ["Peter", "Judas", "Thomas", "John"], correct: "Judas", verse: "Matthew 26:14-16" },
+               { question: "Who was the first man created by God?", answers: ["Eve", "Adam", "Cain", "Noah"], correct: "Adam", verse: "Genesis 2:7", category: "Person" },
   { question: "Who built the Ark?", answers: ["Noah", "Moses", "Abraham", "David"], correct: "Noah", verse: "Genesis 6:14", category: "Person" },
   { question: "Who is known as the father of many nations?", answers: ["Isaac", "Jacob", "Abraham", "Joseph"], correct: "Abraham", verse: "Genesis 17:4-5", category: "Person" },
   { question: "Who was swallowed by a great fish?", answers: ["Jonah", "Job", "Peter", "Paul"], correct: "Jonah", verse: "Jonah 1:17", category: "Person" },
@@ -141,8 +188,14 @@
   { question: "Who anointed Saul as king?", answers: ["Nathan", "Eli", "Samuel", "Elijah"], correct: "Samuel", verse: "1 Samuel 10:1", category: "Person" },
   { question: "Who was the wife of Abraham?", answers: ["Sarah", "Hagar", "Rebekah", "Rachel"], correct: "Sarah", verse: "Genesis 17:15", category: "Person" },
   { question: "Who was known for his wisdom?", answers: ["David", "Moses", "Solomon", "Daniel"], correct: "Solomon", verse: "1 Kings 3:12", category: "Person" },
-  { question: "Who was the brother of Moses?", answers: ["Caleb", "Aaron", "Joshua", "Hur"], correct: "Aaron", verse: "Exodus 4:14", category: "Person" },
-      { question: "What city was the birthplace of Jesus?", answers: ["Nazareth", "Jerusalem", "Capernaum", "Bethlehem"], correct: "Bethlehem", verse: "Luke 2:4-7", category: "Place" },
+  { question: "Who was the brother of Moses?", answers: ["Caleb", "Aaron", "Joshua", "Hur"], correct: "Aaron", verse: "Exodus 4:14", category: "Person" }
+
+      ],
+        
+      Place: [
+        { question: "Where was Jesus born?", answers: ["Nazareth", "Jerusalem", "Bethlehem", "Galilee"], correct: "Bethlehem", verse: "Luke 2:4-7" },
+        { question: "What is the first garden mentioned in the Bible?", answers: ["Eden", "Gethsemane", "Olives", "Zion"], correct: "Eden", verse: "Genesis 2:8" },
+        { question: "What city was the birthplace of Jesus?", answers: ["Nazareth", "Jerusalem", "Capernaum", "Bethlehem"], correct: "Bethlehem", verse: "Luke 2:4-7", category: "Place" },
       
        { question: "Where did Jesus perform His first miracle?", answers: ["Nazareth", "Cana", "Jerusalem", "Bethlehem"], correct: "Cana", verse: "John 2:1-11", category: "Place" },
   { question: "Where was Jesus born?", answers: ["Bethlehem", "Nazareth", "Jerusalem", "Capernaum"], correct: "Bethlehem", verse: "Luke 2:4-7", category: "Place" },
@@ -168,9 +221,14 @@
   { question: "Where did God promise Abraham a land for his descendants?", answers: ["Egypt", "Canaan", "Babylon", "Jericho"], correct: "Canaan", verse: "Genesis 12:7", category: "Place" },
   { question: "Where did the prodigal son return to?", answers: ["Jerusalem", "His father's house", "Nazareth", "Capernaum"], correct: "His father's house", verse: "Luke 15:20", category: "Place" },
   { question: "Where did Philip baptize the Ethiopian eunuch?", answers: ["On the road to Gaza", "Jordan River", "Sea of Galilee", "Bethsaida"], correct: "On the road to Gaza", verse: "Acts 8:26-39", category: "Place" },
-  { question: "Where did God call Moses from a burning bush?", answers: ["Mount Sinai", "Mount Carmel", "Mount Horeb", "Mount Zion"], correct: "Mount Horeb", verse: "Exodus 3:1-2", category: "Place" },
-      
-      { question: "What event caused the destruction of Sodom and Gomorrah?", answers: ["Fire and brimstone", "Earthquake", "Flood", "Plague"], correct: "Fire and brimstone", verse: "Genesis 19:24", category: "Event" },
+  { question: "Where did God call Moses from a burning bush?", answers: ["Mount Sinai", "Mount Carmel", "Mount Horeb", "Mount Zion"], correct: "Mount Horeb", verse: "Exodus 3:1-2", category: "Place" }
+
+      ],
+        
+      Event: [
+        { question: "What was the first miracle of Jesus?", answers: ["Healing the blind", "Turning water into wine", "Walking on water", "Feeding 5000 people"], correct: "Turning water into wine", verse: "John 2:1-11" },
+        { question: "How many days did it rain during the flood?", answers: ["30", "40", "50", "60"], correct: "40", verse: "Genesis 7:12" },
+        { question: "What event caused the destruction of Sodom and Gomorrah?", answers: ["Fire and brimstone", "Earthquake", "Flood", "Plague"], correct: "Fire and brimstone", verse: "Genesis 19:24", category: "Event" },
   { question: "What event marked the beginning of creation?", answers: ["God said, 'Let there be light.'", "The separation of land and sea", "Creation of man", "Creation of the sun and moon"], correct: "God said, 'Let there be light.'", verse: "Genesis 1:3", category: "Event" },
   { question: "What event led to the Israelites' exodus from Egypt?", answers: ["Parting of the Red Sea", "Burning bush", "Golden calf", "The death of the firstborn"], correct: "The death of the firstborn", verse: "Exodus 12:29-30", category: "Event" },
   { question: "What event led to the fall of Jericho?", answers: ["Earthquake", "Burning of the city", "Marching and shouting", "Flood"], correct: "Marching and shouting", verse: "Joshua 6:20", category: "Event" },
@@ -194,9 +252,12 @@
   { question: "What event involved Daniel in the lions' den?", answers: ["His vision of the future", "His interpretation of dreams", "His refusal to stop praying", "His exile to Babylon"], correct: "His refusal to stop praying", verse: "Daniel 6:10-22", category: "Event" },
   { question: "What event involved Jesus turning water into wine?", answers: ["The Last Supper", "The feeding of the 5,000", "The resurrection", "The wedding at Cana"], correct: "The wedding at Cana", verse: "John 2:1-11", category: "Event" },
   { question: "What event marked the beginning of Jesus' ministry?", answers: ["His baptism", "His birth", "The Last Supper", "The Transfiguration"], correct: "His baptism", verse: "Matthew 3:13-17", category: "Event" },
-  { question: "What event involved the defeat of Goliath?", answers: ["David slaying him with a sling", "Samson's strength", "Elijah's confrontation", "Joshua's conquest"], correct: "David slaying him with a sling", verse: "1 Samuel 17:49", category: "Event" },
-      
-      { question: "Which book is known as the Song of Songs?", answers: ["Psalms", "Song of Solomon", "Proverbs", "Ecclesiastes"], correct: "Song of Solomon", verse: "Song of Solomon 1:1", category: "Others" },
+  { question: "What event involved the defeat of Goliath?", answers: ["David slaying him with a sling", "Samson's strength", "Elijah's confrontation", "Joshua's conquest"], correct: "David slaying him with a sling", verse: "1 Samuel 17:49", category: "Event" }
+      ],
+      Others: [
+        { question: "What is the shortest verse in the Bible?", answers: ["Jesus wept.", "God is love.", "The Lord is my shepherd.", "Love one another."], correct: "Jesus wept.", verse: "John 11:35" },
+        { question: "How many books are in the Bible?", answers: ["60", "62", "66", "70"], correct: "66", verse: "Entire Bible" },
+        { question: "Which book is known as the Song of Songs?", answers: ["Psalms", "Song of Solomon", "Proverbs", "Ecclesiastes"], correct: "Song of Solomon", verse: "Song of Solomon 1:1", category: "Others" },
   { question: "Which book in the Bible has the most chapters?", answers: ["Isaiah", "Psalms", "Genesis", "Jeremiah"], correct: "Psalms", verse: "Psalms 1:1", category: "Others" },
   { question: "What is the shortest verse in the Bible?", answers: ["God is love", "Rejoice always", "Jesus wept", "Pray without ceasing"], correct: "Jesus wept", verse: "John 11:35", category: "Others" },
   { question: "Who is the oldest man recorded in the Bible?", answers: ["Adam", "Noah", "Methuselah", "Enoch"], correct: "Methuselah", verse: "Genesis 5:27", category: "Others" },
@@ -221,75 +282,17 @@
   { question: "Who received the Ten Commandments?", answers: ["Moses", "Abraham", "Noah", "Joshua"], correct: "Moses", verse: "Exodus 20:1-17", category: "Others" },
   { question: "Which book contains the Beatitudes?", answers: ["Matthew", "Mark", "Luke", "John"], correct: "Matthew", verse: "Matthew 5:3-12", category: "Others" },
   { question: "What does the name Emmanuel mean?", answers: ["Prince of peace", "King of kings", "God with us", "God is love"], correct: "God with us", verse: "Matthew 1:23", category: "Others" }
+      ]    
+    };
 
-    ];
-
+    let currentCategory = "";
     let currentQuestionIndex = 0;
     let score = 0;
-    let mode = "reading";
-    let filteredQuestions = [];
     const backgroundMusic = document.getElementById("background-music");
-    const synth = window.speechSynthesis;
+    const clickSound = document.getElementById("click-sound");
 
-    function startGame(selectedMode) {
-      mode = selectedMode;
-      document.getElementById("mode-buttons").style.display = "none";
-      document.getElementById("category-buttons").style.display = "flex";
-    }
-
-    function selectCategory(category) {
-      filteredQuestions = allQuestions.filter(q => q.category === category);
-      currentQuestionIndex = 0;
-      score = 0;
-      document.getElementById("category-buttons").style.display = "none";
-      nextQuestion();
-    }
-
-    function nextQuestion() {
-      if (currentQuestionIndex >= filteredQuestions.length) {
-        document.getElementById("message").innerText = `Quiz Completed! Your score is ${score}/${filteredQuestions.length}.`;
-        document.getElementById("end-buttons").style.display = "flex";
-        return;
-      }
-      const questionData = filteredQuestions[currentQuestionIndex];
-      document.getElementById("question").innerText = questionData.question;
-      const optionsDiv = document.getElementById("options");
-      optionsDiv.innerHTML = "";
-      questionData.answers.forEach(answer => {
-        const button = document.createElement("button");
-        button.innerText = answer;
-        button.onclick = () => checkAnswer(answer);
-        optionsDiv.appendChild(button);
-      });
-      if (mode === "voice") speak(questionData.question);
-    }
-
-    function checkAnswer(selectedAnswer) {
-      const questionData = filteredQuestions[currentQuestionIndex];
-      if (selectedAnswer === questionData.correct) {
-        document.getElementById("message").innerText = "Correct!";
-        score++;
-      } else {
-        document.getElementById("message").innerText = `Wrong! The correct answer was: ${questionData.correct}.`;
-      }
-      document.getElementById("verse").innerText = questionData.verse;
-      if (mode === "voice") speak(`${document.getElementById("message").innerText} ${questionData.verse}`);
-      currentQuestionIndex++;
-      document.getElementById("decision-buttons").style.display = "flex";
-    }
-
-    function exitGame() {
-      alert("Thank you for playing! The game will now exit.");
-      location.reload();
-    }
-
-    function playAgain() {
-      document.getElementById("end-buttons").style.display = "none";
-      document.getElementById("message").innerText = "";
-      document.getElementById("question").innerText = "";
-      document.getElementById("options").innerHTML = "";
-      document.getElementById("verse").innerText = "";
-      document.getElementById("category-buttons").style.display = "flex";
+    function playClickSound() {
+      clickSound.play();
     }
 
     function toggleMusic() {
@@ -303,20 +306,107 @@
       }
     }
 
-    function increaseVolume() {
-      if (backgroundMusic.volume < 1) backgroundMusic.volume = Math.min(1, backgroundMusic.volume + 0.1);
+    function startGame() {
+      document.getElementById("mode-buttons").style.display = "none";
+      document.getElementById("category-buttons").style.display = "flex";
     }
 
-    function decreaseVolume() {
-      if (backgroundMusic.volume > 0) backgroundMusic.volume = Math.max(0, backgroundMusic.volume - 0.1);
+    function selectCategory(category) {
+      currentCategory = category;
+      currentQuestionIndex = 0;
+      score = 0;
+      document.getElementById("category-buttons").style.display = "none";
+      document.getElementById("question-container").style.display = "block";
+      loadQuestion();
     }
 
-    function speak(text) {
-      if (synth.speaking) synth.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 1;
-      synth.speak(utterance);
+    function loadQuestion() {
+      const questions = questionsByCategory[currentCategory];
+      const questionData = questions[currentQuestionIndex];
+      document.getElementById("question").innerText = questionData.question;
+
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+
+      questionData.answers.forEach(answer => {
+        const button = document.createElement("button");
+        button.innerText = answer;
+        button.onclick = () => selectAnswer(answer);
+        optionsDiv.appendChild(button);
+        
+      });
+      document.getElementById("message").innerText = "";
+      document.getElementById("verse").innerText = "";
+      document.getElementById("decision-buttons").style.display = "none";
     }
+
+    function selectAnswer(selectedAnswer) {
+      const questions = questionsByCategory[currentCategory];
+      const questionData = questions[currentQuestionIndex];
+
+      const allButtons = document.getElementById("options").getElementsByTagName("button");
+      
+      Array.from(allButtons).forEach(button => {
+        button.disabled = true;
+        button.style.opacity = "1.0";
+      });
+     
+
+      const messageElement = document.getElementById("message");
+      if (selectedAnswer === questionData.correct) {
+        messageElement.innerText = "Correct!";
+        messageElement.className = "correct";
+        score++;
+      } else {
+        messageElement.innerText = `Wrong! The correct answer was: ${questionData.correct}.`;
+        messageElement.className = "wrong";
+      }
+
+     document.getElementById("verse").innerText = questionData.verse;
+      document.getElementById("decision-buttons").style.display = "flex";
+    }
+
+    function nextQuestion() {
+      const questions = questionsByCategory[currentCategory];
+      currentQuestionIndex++;
+      if (currentQuestionIndex >= questions.length) {
+        document.getElementById("question").innerText = "Quiz Completed!";
+        document.getElementById("options").innerHTML = "";
+        document.getElementById("message").innerText = `Your score is ${score}/${questions.length}.`;
+        document.getElementById("verse").innerText = "";
+        document.getElementById("decision-buttons").style.display = "none";
+        document.getElementById("end-buttons").style.display = "flex";  // End buttons shown after all questions
+      } else {
+        loadQuestion();
+      }
+    }
+
+   function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function playAgain() {
+  // Shuffle questions in each category
+  Object.keys(questionsByCategory).forEach(category => {
+    shuffleArray(questionsByCategory[category]);
+  });
+
+  currentQuestionIndex = 0;
+  score = 0;
+  document.getElementById("end-buttons").style.display = "none";
+  document.getElementById("category-buttons").style.display = "flex";
+  document.getElementById("question-container").style.display = "none";
+}
+
+
+    function exitGame() {
+      alert("Thank you for playing! Exiting game...");
+      location.reload();
+    }
+    
   </script>
 </body>
 </html>
