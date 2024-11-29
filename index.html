@@ -185,7 +185,7 @@
     const questionsByCategory = {
      
       Person: [
-        { question: "Who was the first man created by God?", answers: ["Eve", "Adam", "Cain", "Noah"], correct: "Adam", verse: "Genesis 2:7" },
+       
         { question: "Who betrayed Jesus?", answers: ["Peter", "Judas", "Thomas", "John"], correct: "Judas", verse: "Matthew 26:14-16" },
                { question: "Who was the first man created by God?", answers: ["Eve", "Adam", "Cain", "Noah"], correct: "Adam", verse: "Genesis 2:7", category: "Person" },
   { question: "Who built the Ark?", answers: ["Noah", "Moses", "Abraham", "David"], correct: "Noah", verse: "Genesis 6:14", category: "Person" },
@@ -216,7 +216,7 @@
       ],
         
       Place: [
-        { question: "Where was Jesus born?", answers: ["Nazareth", "Jerusalem", "Bethlehem", "Galilee"], correct: "Bethlehem", verse: "Luke 2:4-7" },
+        
         { question: "What is the first garden mentioned in the Bible?", answers: ["Eden", "Gethsemane", "Olives", "Zion"], correct: "Eden", verse: "Genesis 2:8" },
         { question: "What city was the birthplace of Jesus?", answers: ["Nazareth", "Jerusalem", "Capernaum", "Bethlehem"], correct: "Bethlehem", verse: "Luke 2:4-7", category: "Place" },
       
@@ -418,11 +418,13 @@
  function exitGame() {
   const userChoice = confirm("Are you sure you want to exit the game?");
   if (userChoice) {
-    window.close(); // Closes the app or browser tab
+    navigator.app.exitApp();
+    window.close();// Close the mobile application
   } else {
-   // alert("Continuing the game!"); // Optional: Remove this line for immediate return
+    // Return to the game
   }
 }
+
 
   </script>
 </body>
