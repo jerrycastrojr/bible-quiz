@@ -418,13 +418,12 @@
  function exitGame() {
   const userChoice = confirm("Are you sure you want to exit the game?");
   if (userChoice) {
-    navigator.app.exitApp();
-   // window.close();// Close the mobile application
+    window.location.href = "goodbye.html";
+    window.close();// Redirect to a goodbye page
   } else {
     // Return to the game
   }
 }
-
 
   </script>
 </body>
